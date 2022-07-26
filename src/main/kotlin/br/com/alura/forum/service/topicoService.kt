@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.NovoTopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.exception.NotFoundExeption
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
@@ -14,7 +15,8 @@ import kotlin.collections.ArrayList
 class topicoService(
     private var topicos: kotlin.collections.List<Topico> = ArrayList(),
     private val topicoViewMapper: TopicoViewMapper,
-    private val topicoFormMapper: TopicoFormMapper
+    private val topicoFormMapper: TopicoFormMapper,
+    private val notFoundMessega: String = "Topico nao encontrado"
 ) {
 
     fun listar(): List<TopicoView>{
@@ -26,7 +28,7 @@ class topicoService(
     fun buscarPorId(id: Long): TopicoView {
         val topico = topicos.stream().filter { t ->
             t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{ NotFoundExeption(notFoundMessega) }
         return topicoViewMapper.map(topico)
     }
 
@@ -40,7 +42,7 @@ class topicoService(
     fun atualizar(form: AtualizacaoTopicoForm): TopicoView {
         val topico = topicos.stream().filter{ t->
             t.id == form.id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{ NotFoundExeption(notFoundMessega) }
         val topicoAtual = Topico(
             id = form.id,
             titulo = form.titulo,
@@ -58,7 +60,7 @@ class topicoService(
     fun deletar(id: Long) {
         val topico = topicos.stream().filter{ t->
             t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{ NotFoundExeption(notFoundMessega) }
         topicos = topicos.minus(topico)
     }
 
