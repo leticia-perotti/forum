@@ -1,26 +1,18 @@
 package br.com.alura.forum.service
 
 import br.com.alura.forum.model.Curso
+import br.com.alura.forum.repository.CursoRepositoty
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class CursoService (
-    var cursos: List<Curso>
+    private val cursoRepositoty: CursoRepositoty
         ){
-    init{
-        val curso = Curso(
-            id = 1 ,
-            nome = "Kotlin",
-            categoria = "Programção"
-        )
-        cursos = Arrays.asList(curso)
-    }
 
     fun buscarPoId(id: Long): Curso{
-        return cursos.stream().filter({
-            c -> c.id == id
-        }).findFirst().get()
+        return cursoRepositoty.findByIdOrNull(id)!!
     }
 
 }
