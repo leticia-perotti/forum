@@ -13,9 +13,12 @@ interface TopicoRepository: JpaRepository<Topico, Long> {
 
     fun findByCursoNome(nomeCurso: String, paginacao: Pageable): Page<Topico>
 
-    @Query(
+    /*@Query(
         "select curso.categoria, count(topico.id) as quantidade from topico t join curso on (t.curso_id = curso.id) Group By curso.categoria", nativeQuery = true
     )
-    fun relatorio(): List<Any>
+    fun relatorio(): List<Any>*/
+
+    @Query("SELECT new br.com.alura.forum.dto.TopicoPorCategoriaDto(curso.categoria, count(t)) FROM Topico t JOIN t.curso curso GROUP BY curso.categoria")
+    fun relatorio(): List<TopicoPorCategoriaDto>
 
 }

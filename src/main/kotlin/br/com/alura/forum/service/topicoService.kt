@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
+import javax.persistence.EntityManager
 import kotlin.collections.ArrayList
 
 @Service
@@ -21,13 +22,15 @@ class topicoService(
     private var topicosRepository: TopicoRepository,
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper,
-    private val notFoundMessega: String = "Topico nao encontrado"
+    private val notFoundMessega: String = "Topico nao encontrado",
+    private val em: EntityManager
 ) {
 
     fun listar(
         nomeCurso: String?,
         paginacao: Pageable
     ): Page<TopicoView> {
+        println(em)
         val topicos = if(nomeCurso == null){
             topicosRepository.findAll(paginacao)
         }else{
