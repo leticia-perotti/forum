@@ -1,5 +1,6 @@
 package br.com.alura.forum.model
 
+import br.com.alura.forum.dto.TopicoPorCategoriaDto
 import java.time.LocalDateTime
 import javax.persistence.*
 
